@@ -20,13 +20,18 @@
       <v-divider></v-divider>
 
       <v-list dense nav>
-        <v-list-item v-for="item in items" :key="item.title" :to="item.to" link>
+        <v-list-item
+          v-for="item in items"
+          :key="item.id"
+          :to="'/' + item.id"
+          link
+        >
           <v-list-item-icon class="my-auto">
-            <v-icon>{{ item.icon }}</v-icon>
+            <v-icon>mdi-format-list-checks</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.title }}</v-list-item-title>
+            <v-list-item-title>{{ item.name }}</v-list-item-title>
           </v-list-item-content>
 
           <v-list-item-action>
@@ -73,31 +78,44 @@
 </template>
 
 <script>
+import axios from "axios";
+const listURL = "http://127.0.0.1:8000/lists/";
+
 export default {
   data: () => ({
     drawer: null,
     newListTitle: "",
-    items: [
-      { title: "List 1", icon: "mdi-format-list-checks", to: "/1" }, // zamienic to na :to="'/'+this.id" w atrybucie
-      { title: "List 2", icon: "mdi-format-list-checks", to: "/2" },
-      { title: "About", icon: "mdi-help-box", to: "/about" },
-    ],
+    items: [],
   }),
   methods: {
-    addList() {
-      if (!this.newListTitle) return;
-      let newList = {
-        id: Date.now(),
-        title: this.newListTitle,
-        icon: "mdi-format-list-checks",
-        to: "/",
+    async getLists() {
+      const res = await axios.get(listURL);
+      this.items = res.data;
+    },
+    async addList() {
+      const data = {
+        name: this.newListTitle,
       };
-      this.items.push(newList);
+      await axios.post(listURL, data);
       this.newListTitle = "";
+      this.getLists();
     },
-    deleteList(id) {
-      this.items = this.items.filter((item) => item.id != id);
+
+    async deleteList(id) {
+      try {
+        await axios.delete(listURL + id + "/");
+        this.getLists();
+      } catch (error) {
+        console.error(error);
+      }
     },
+  },
+  async created() {
+    try {
+      this.getLists();
+    } catch (e) {
+      console.error(e);
+    }
   },
 };
 </script>
