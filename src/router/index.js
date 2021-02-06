@@ -6,12 +6,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/1',
-    name: 'Todo',
-    component: Todo
-  },
-  {
-    path: '/2',
+    path: '/lists/:id',
     name: 'Todo',
     component: Todo
   },
@@ -26,7 +21,8 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  routes
+  routes,
+  mode: 'history'
 })
 
 export default router

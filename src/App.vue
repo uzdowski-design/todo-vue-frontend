@@ -23,7 +23,7 @@
         <v-list-item
           v-for="item in items"
           :key="item.id"
-          :to="'/' + item.id"
+          :to="'/lists/' + item.id"
           link
         >
           <v-list-item-icon class="my-auto">
@@ -52,8 +52,13 @@
       </template>
 
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-
-      <v-toolbar-title>Your Todos</v-toolbar-title>
+      <v-toolbar-title>
+        {{
+          items.find((x) => x.id == this.$route.params.id)
+            ? items.find((x) => x.id == this.$route.params.id).name + " tasks"
+            : " Pick a list to view tasks"
+        }}
+      </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -61,18 +66,19 @@
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
 
-      <v-btn icon>
+      <!-- <v-btn icon>
         <v-icon>mdi-heart</v-icon>
       </v-btn>
 
       <v-btn icon>
         <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn>
+      </v-btn> -->
     </v-app-bar>
 
     <v-main>
       <!--  -->
-      <router-view></router-view>
+      <router-view :key="$route.name + ($route.params.id || '')"></router-view>
+      <!-- watch routes changing and refresh component -->
     </v-main>
   </v-app>
 </template>
@@ -93,6 +99,7 @@ export default {
       this.items = res.data;
     },
     async addList() {
+      if (!this.newListTitle) return;
       const data = {
         name: this.newListTitle,
       };
@@ -103,11 +110,11 @@ export default {
 
     async deleteList(id) {
       try {
-        await axios.delete(listURL + id + "/");
-        this.getLists();
+        axios.delete(listURL + id + "/");
       } catch (error) {
         console.error(error);
       }
+      this.getLists();
     },
   },
   async created() {

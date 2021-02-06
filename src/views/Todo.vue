@@ -25,7 +25,7 @@
             <v-list-item-content>
               <v-list-item-title
                 :class="{ 'text-decoration-line-through': task.done }"
-                >{{ task.title }}</v-list-item-title
+                >{{ task.name }}</v-list-item-title
               >
             </v-list-item-content>
             <v-list-item-action>
@@ -42,10 +42,15 @@
 </template>
 
 <script>
+import axios from "axios";
+const listURL = "http://127.0.0.1:8000/lists/";
+const taskURL = "http://127.0.0.1:8000/tasks/";
+
 export default {
   name: "Home",
   data() {
     return {
+      id: this.$route.params.id,
       newTaskTitle: "",
       tasks: [
         // {
@@ -62,28 +67,45 @@ export default {
         //   id: 3,
         //   title: "Go to sleep",
         //   done: false,
-        // }
+        // },
       ],
     };
   },
   methods: {
-    addTask() {
+    async getTasks() {
+      const res = await axios.get(listURL + this.id + "/");
+      this.tasks = [...res.data.children];
+    },
+    async addTask() {
       if (!this.newTaskTitle) return;
-      let newTask = {
-        id: Date.now(),
-        title: this.newTaskTitle,
-        done: false,
+      const data = {
+        name: this.newTaskTitle,
+        parent_id: this.id,
       };
-      this.tasks.push(newTask);
+      await axios.post(taskURL, data);
       this.newTaskTitle = "";
+      this.getTasks();
     },
-    doneTask(id) {
+    async doneTask(id) {
       let task = this.tasks.filter((task) => task.id == id)[0];
-      task.done = !task.done;
+      const data = {
+        done: !task.done,
+      };
+      await axios.patch(taskURL + id + "/", data);
+      this.getTasks();
     },
-    deleteTask(id) {
-      this.tasks = this.tasks.filter((task) => task.id != id);
+    async deleteTask(id) {
+      // this.tasks = this.tasks.filter((task) => task.id != id);
+      await axios.delete(taskURL + id + "/");
+      this.getTasks();
     },
+  },
+  mounted() {
+    try {
+      this.getTasks();
+    } catch (e) {
+      console.error(e);
+    }
   },
 };
 </script>
