@@ -20,13 +20,27 @@
       <v-divider></v-divider>
 
       <v-list dense nav>
+        <v-list-item :to="'/'" link>
+          <v-list-item-icon class="my-auto">
+            <v-icon>mdi-home</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>Home</v-list-item-title>
+          </v-list-item-content>
+          <v-list-item-action>
+            <v-btn icon>
+              <v-icon>mdi-arrow-right-bold-circle</v-icon>
+            </v-btn>
+          </v-list-item-action>
+        </v-list-item>
         <v-list-item
           v-for="item in items"
           :key="item.id"
           :to="'/lists/' + item.id"
           link
         >
-          <v-list-item-icon class="my-auto">
+          <v-list-item-icon class="my-auto pa">
             <v-icon>mdi-format-list-checks</v-icon>
           </v-list-item-icon>
 
@@ -52,11 +66,13 @@
       </template>
 
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title>
+      <v-toolbar-title class="text-uppercase">
         {{
-          items.find((x) => x.id == this.$route.params.id)
+          this.$route.path == "/dashboard"
+            ? "Your dashboard"
+            : items.find((x) => x.id == this.$route.params.id)
             ? items.find((x) => x.id == this.$route.params.id).name + " tasks"
-            : " Pick a list to view tasks"
+            : "Pick a list to view tasks"
         }}
       </v-toolbar-title>
 
@@ -65,14 +81,6 @@
       <v-btn icon>
         <v-icon>mdi-magnify</v-icon>
       </v-btn>
-
-      <!-- <v-btn icon>
-        <v-icon>mdi-heart</v-icon>
-      </v-btn>
-
-      <v-btn icon>
-        <v-icon>mdi-dots-vertical</v-icon>
-      </v-btn> -->
     </v-app-bar>
 
     <v-main>
@@ -95,8 +103,10 @@ export default {
   }),
   methods: {
     async getLists() {
-      const res = await axios.get(listURL);
-      this.items = res.data;
+      try {
+        const res = await axios.get(listURL);
+        this.items = res.data;
+      } catch (e) {}
     },
     async addList() {
       if (!this.newListTitle) return;

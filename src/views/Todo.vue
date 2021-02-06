@@ -52,23 +52,7 @@ export default {
     return {
       id: this.$route.params.id,
       newTaskTitle: "",
-      tasks: [
-        // {
-        //   id: 1,
-        //   title: "Wake up",
-        //   done: false,
-        // },
-        // {
-        //   id: 2,
-        //   title: "Do stuff",
-        //   done: false,
-        // },
-        // {
-        //   id: 3,
-        //   title: "Go to sleep",
-        //   done: false,
-        // },
-      ],
+      tasks: [],
     };
   },
   methods: {
