@@ -11,7 +11,7 @@
       hide-details
       clearable
     ></v-text-field>
-    <v-list flat class="pt-0">
+    <v-list flat class="pt-0" v-if="tasks.length">
       <div v-for="task in tasks" :key="task.id">
         <v-list-item
           @click="doneTask(task.id)"
@@ -38,6 +38,10 @@
         <v-divider></v-divider>
       </div>
     </v-list>
+    <div v-else class="no-tasks">
+      <v-icon size="100" color="primary"> mdi-check </v-icon>
+      <div class="text-h5 primary--text">No tasks</div>
+    </div>
   </div>
 </template>
 
@@ -93,3 +97,12 @@ export default {
   },
 };
 </script>
+
+<style lang="sass">
+.no-tasks
+  position: absolute
+  left: 50%
+  top: 50%
+  transform: translate(-50%,-50%)
+  opacity: .5
+</style>
