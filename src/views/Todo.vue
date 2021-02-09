@@ -46,54 +46,45 @@
 </template>
 
 <script>
-import axios from "axios";
-const listURL = "http://127.0.0.1:8000/lists/";
-const taskURL = "http://127.0.0.1:8000/tasks/";
-
 export default {
   name: "Home",
   data() {
     return {
       id: this.$route.params.id,
       newTaskTitle: "",
-      tasks: [],
     };
   },
   methods: {
-    async getTasks() {
-      const res = await axios.get(listURL + this.id + "/");
-      this.tasks = [...res.data.children];
-    },
     async addTask() {
       if (!this.newTaskTitle) return;
       const data = {
         name: this.newTaskTitle,
         parent_id: this.id,
       };
-      await axios.post(taskURL, data);
+      this.$store.dispatch("addTask", data);
       this.newTaskTitle = "";
-      this.getTasks();
     },
     async doneTask(id) {
       let task = this.tasks.filter((task) => task.id == id)[0];
       const data = {
-        done: !task.done,
+        id: id,
+        payload: {
+          done: !task.done,
+        },
       };
-      await axios.patch(taskURL + id + "/", data);
-      this.getTasks();
+      this.$store.dispatch("doneTask", data);
     },
-    async deleteTask(id) {
-      // this.tasks = this.tasks.filter((task) => task.id != id);
-      await axios.delete(taskURL + id + "/");
-      this.getTasks();
+    deleteTask(id) {
+      this.$store.dispatch("deleteTask", { id: id });
+    },
+  },
+  computed: {
+    tasks() {
+      return this.$store.state.tasks;
     },
   },
   mounted() {
-    try {
-      this.getTasks();
-    } catch (e) {
-      console.error(e);
-    }
+    this.$store.dispatch("fetchTasks", { id: this.$route.params.id });
   },
 };
 </script>

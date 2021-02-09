@@ -35,9 +35,9 @@
           </v-list-item-action>
         </v-list-item>
         <v-list-item
-          v-for="item in items"
-          :key="item.id"
-          :to="'/lists/' + item.id"
+          v-for="list in lists"
+          :key="list.id"
+          :to="'/lists/' + list.id"
           link
         >
           <v-list-item-icon class="my-auto pa">
@@ -45,13 +45,15 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{ item.name }}</v-list-item-title>
+            <v-list-item-title>{{ list.name }}</v-list-item-title>
           </v-list-item-content>
 
           <v-list-item-action>
-            <v-btn icon @click.stop="deleteList(item.id)">
-              <v-icon color="primary lighten-1">mdi-delete-outline</v-icon>
-            </v-btn>
+            <div>
+              <v-btn icon @click.stop="deleteList(list.id)">
+                <v-icon color="primary lighten-1">mdi-delete-outline</v-icon>
+              </v-btn>
+            </div>
           </v-list-item-action>
         </v-list-item>
       </v-list>
@@ -67,13 +69,14 @@
 
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-uppercase">
-        {{
+        <!-- {{
           this.$route.path == "/dashboard"
             ? "Your dashboard"
-            : items.find((x) => x.id == this.$route.params.id)
-            ? items.find((x) => x.id == this.$route.params.id).name + " tasks"
+            : lists.find((x) => x.id == this.$route.params.id)
+            ? lists.find((x) => x.id == this.$route.params.id).name + " tasks"
             : "Pick a list to view tasks"
-        }}
+        }} -->
+        Your Todos
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -92,47 +95,36 @@
 </template>
 
 <script>
-import axios from "axios";
-const listURL = "http://127.0.0.1:8000/lists/";
-
 export default {
   data: () => ({
     drawer: null,
     newListTitle: "",
-    items: [],
   }),
   methods: {
-    async getLists() {
-      try {
-        const res = await axios.get(listURL);
-        this.items = res.data;
-      } catch (e) {}
-    },
-    async addList() {
+    addList() {
       if (!this.newListTitle) return;
       const data = {
         name: this.newListTitle,
       };
-      await axios.post(listURL, data);
+      this.$store.dispatch("addList", data);
       this.newListTitle = "";
-      this.getLists();
     },
 
-    async deleteList(id) {
+    deleteList(id) {
       try {
-        axios.delete(listURL + id + "/");
+        this.$store.dispatch("deleteList", { id: id });
       } catch (error) {
         console.error(error);
       }
-      this.getLists();
     },
   },
-  async created() {
-    try {
-      this.getLists();
-    } catch (e) {
-      console.error(e);
-    }
+  computed: {
+    lists() {
+      return this.$store.state.lists;
+    },
+  },
+  mounted() {
+    this.$store.dispatch("fetchLists");
   },
 };
 </script>
