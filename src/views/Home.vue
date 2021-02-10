@@ -6,14 +6,14 @@
       >
     </v-card>
     <v-list flat class="pt-0">
-      <div v-for="item in items" :key="item.id">
-        <v-list-item :to="'/lists/' + item.id" link>
+      <div v-for="list in lists" :key="list.id">
+        <v-list-item :to="'/lists/' + list.id" link>
           <template v-slot:default>
             <v-list-item-content>
-              <v-list-item-title>{{ item.name }}</v-list-item-title>
+              <v-list-item-title>{{ list.name }}</v-list-item-title>
             </v-list-item-content>
             <v-list-item-action>
-              <v-btn icon @click.stop="deleteTask(item.id)">
+              <v-btn icon @click.prevent="deleteList(list.id)">
                 <v-icon color="primary lighten-1">mdi-delete</v-icon>
               </v-btn>
             </v-list-item-action>
@@ -52,21 +52,31 @@ export default {
       this.getLists();
     },
 
-    async deleteList(id) {
+    deleteList(id) {
       try {
-        axios.delete(listURL + id + "/");
+        this.$store.dispatch("deleteList", { id: id });
+        if (id == this.$route.params.id) {
+          this.$router.push("/");
+        }
       } catch (error) {
         console.error(error);
       }
-      this.getLists();
     },
   },
-  async created() {
-    try {
-      this.getLists();
-    } catch (e) {
-      console.error(e);
-    }
+  computed: {
+    lists() {
+      return this.$store.state.lists;
+    },
   },
+  mounted() {
+    this.$store.dispatch("fetchLists");
+  },
+  // async created() {
+  //   try {
+  //     this.getLists();
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // },
 };
 </script>

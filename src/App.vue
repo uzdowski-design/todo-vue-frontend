@@ -3,63 +3,26 @@
     <v-navigation-drawer v-model="drawer" app>
       <v-list-item>
         <v-list-item-content>
-          <v-list-item-title class="title"> Task Lists </v-list-item-title>
+          <v-list-item-title class="title"> Your Task Lists </v-list-item-title>
         </v-list-item-content>
       </v-list-item>
-      <v-text-field
-        v-model="newListTitle"
-        @click:append="addList"
-        @keyup.enter="addList"
-        class="pa-3"
-        outlined
-        label="New List"
-        append-icon="mdi-plus"
-        hide-details
-        clearable
-      ></v-text-field>
+      <field-add-list />
       <v-divider></v-divider>
 
       <v-list dense nav>
-        <v-list-item :to="'/'" link>
-          <v-list-item-icon class="my-auto">
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-icon>
+        <list-dashboard />
 
-          <v-list-item-content>
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item-content>
-          <v-list-item-action>
-            <v-btn icon>
-              <v-icon>mdi-arrow-right-bold-circle</v-icon>
-            </v-btn>
-          </v-list-item-action>
-        </v-list-item>
-        <v-list-item
+        <list-item
           v-for="list in lists"
           :key="list.id"
-          :to="'/lists/' + list.id"
-          link
-        >
-          <v-list-item-icon class="my-auto pa">
-            <v-icon>mdi-format-list-checks</v-icon>
-          </v-list-item-icon>
-
-          <v-list-item-content>
-            <v-list-item-title>{{ list.name }}</v-list-item-title>
-          </v-list-item-content>
-
-          <v-list-item-action>
-            <div>
-              <v-btn icon @click.stop="deleteList(list.id)">
-                <v-icon color="primary lighten-1">mdi-delete-outline</v-icon>
-              </v-btn>
-            </div>
-          </v-list-item-action>
-        </v-list-item>
+          :list="list"
+          :deleteList="deleteList"
+        />
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app color="primary" dark src="storm.jpeg" prominent>
+    <v-app-bar app color="primary" dark src="@/assets/storm.jpeg" prominent>
+      <!-- <v-app-bar app color="primary" dark src="storm.jpeg" prominent> -->
       <template v-slot:img="{ props }">
         <v-img
           v-bind="props"
@@ -69,14 +32,14 @@
 
       <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       <v-toolbar-title class="text-uppercase">
-        <!-- {{
-          this.$route.path == "/dashboard"
+        {{
+          this.$route.path == "/"
             ? "Your dashboard"
-            : lists.find((x) => x.id == this.$route.params.id)
-            ? lists.find((x) => x.id == this.$route.params.id).name + " tasks"
+            : $store.state.lists.find((x) => x.id == this.$route.params.id)
+            ? $store.state.lists.find((x) => x.id == this.$route.params.id)
+                .name + " tasks"
             : "Pick a list to view tasks"
-        }} -->
-        Your Todos
+        }}
       </v-toolbar-title>
 
       <v-spacer></v-spacer>
@@ -98,21 +61,19 @@
 export default {
   data: () => ({
     drawer: null,
-    newListTitle: "",
   }),
+  components: {
+    "field-add-list": require("@/components/List/FieldAddList.vue").default,
+    "list-dashboard": require("@/components/List/ListDashboard.vue").default,
+    "list-item": require("@/components/List/ListItem.vue").default,
+  },
   methods: {
-    addList() {
-      if (!this.newListTitle) return;
-      const data = {
-        name: this.newListTitle,
-      };
-      this.$store.dispatch("addList", data);
-      this.newListTitle = "";
-    },
-
     deleteList(id) {
       try {
         this.$store.dispatch("deleteList", { id: id });
+        if (id == this.$route.params.id) {
+          this.$router.push("/");
+        }
       } catch (error) {
         console.error(error);
       }
