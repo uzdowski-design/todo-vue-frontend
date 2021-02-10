@@ -52,6 +52,7 @@
     <v-main>
       <!--  -->
       <router-view :key="$route.name + ($route.params.id || '')"></router-view>
+      <snackbar />
       <!-- watch routes changing and refresh component -->
     </v-main>
   </v-app>
@@ -66,6 +67,7 @@ export default {
     "field-add-list": require("@/components/List/FieldAddList.vue").default,
     "list-dashboard": require("@/components/List/ListDashboard.vue").default,
     "list-item": require("@/components/List/ListItem.vue").default,
+    snackbar: require("@/components/Global/Snackbar.vue").default,
   },
   methods: {
     deleteList(id) {

@@ -1,15 +1,19 @@
 <template>
   <v-text-field
     v-model="newListTitle"
-    @click:append="addList"
     @keyup.enter="addList"
     class="pa-3"
     outlined
     label="New List"
-    append-icon="mdi-plus"
     hide-details
     clearable
-  ></v-text-field>
+  >
+    <template v-slot:append>
+      <v-icon @click="addList" color="primary" :disabled="newListTitleInvalid"
+        >mdi-plus</v-icon
+      >
+    </template>
+  </v-text-field>
 </template>
 
 <script>
@@ -17,9 +21,14 @@ export default {
   data: () => ({
     newListTitle: "",
   }),
+  computed: {
+    newListTitleInvalid() {
+      return !this.newListTitle;
+    },
+  },
   methods: {
     addList() {
-      if (!this.newListTitle) return;
+      if (this.newListTitleInvalid) return;
       const data = {
         name: this.newListTitle,
       };
