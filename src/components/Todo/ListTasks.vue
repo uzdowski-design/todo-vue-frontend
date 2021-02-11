@@ -11,13 +11,16 @@
 </template>
 
 <script>
+import { mapGetters } from "vuex";
 export default {
   components: {
     task: require("@/components/Todo/Task.vue").default,
   },
   computed: {
     tasks() {
-      return this.$store.state.tasks;
+      // console.log(this.$store.getters.tasksFiltered);
+      // return this.$store.state.tasks;
+      return this.$store.getters.tasksFiltered;
     },
   },
   methods: {

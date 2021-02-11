@@ -30,23 +30,25 @@
         ></v-img>
       </template>
 
-      <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-toolbar-title class="text-uppercase">
-        {{
-          this.$route.path == "/"
-            ? "Your dashboard"
-            : $store.state.lists.find((x) => x.id == this.$route.params.id)
-            ? $store.state.lists.find((x) => x.id == this.$route.params.id)
-                .name + " tasks"
-            : "Pick a list to view tasks"
-        }}
-      </v-toolbar-title>
-
-      <v-spacer></v-spacer>
-
-      <v-btn icon>
-        <v-icon>mdi-magnify</v-icon>
-      </v-btn>
+      <v-container class="pa-0">
+        <v-row>
+          <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-spacer></v-spacer>
+          <search />
+        </v-row>
+        <v-row>
+          <v-toolbar-title class="text-uppercase ml-4">
+            {{
+              this.$route.path == "/"
+                ? "Your dashboard"
+                : $store.state.lists.find((x) => x.id == this.$route.params.id)
+                ? $store.state.lists.find((x) => x.id == this.$route.params.id)
+                    .name + " tasks"
+                : "Pick a list to view tasks"
+            }}
+          </v-toolbar-title>
+        </v-row>
+      </v-container>
     </v-app-bar>
 
     <v-main>
@@ -67,6 +69,7 @@ export default {
     "field-add-list": require("@/components/List/FieldAddList.vue").default,
     "list-dashboard": require("@/components/List/ListDashboard.vue").default,
     "list-item": require("@/components/List/ListItem.vue").default,
+    search: require("@/components/Tools/Search.vue").default,
     snackbar: require("@/components/Global/Snackbar.vue").default,
   },
   methods: {

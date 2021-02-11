@@ -9,6 +9,7 @@ const taskURL = "http://127.0.0.1:8000/tasks/";
 
 export default new Vuex.Store({
   state: {
+    search: null,
     lists: [],
     tasks: [],
     snackbar: {
@@ -17,6 +18,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    SET_SEARCH(state, value) {
+      state.search = value;
+    },
     SET_LISTS(state, lists) {
       state.lists = lists
     },
@@ -45,6 +49,12 @@ export default new Vuex.Store({
       let newState = [...state.tasks]
       const elIndex = state.tasks.findIndex(el => el.id == data.id)
       newState[elIndex] = { ...newState[elIndex], name: data.payload.name }
+      state.tasks = newState;
+    },
+    EDIT_DATE(state, data) {
+      let newState = [...state.tasks]
+      const elIndex = state.tasks.findIndex(el => el.id == data.id)
+      newState[elIndex] = { ...newState[elIndex], due_date: data.payload.due_date }
       state.tasks = newState;
     },
     SHOW_SNACKBAR(state, text) {
@@ -101,7 +111,18 @@ export default new Vuex.Store({
     async editTask({ commit }, data) {
       await axios.patch(taskURL + data.id + "/", data.payload);
       commit('EDIT_TASK', data);
-      commit('SHOW_SNACKBAR', 'Task Edited')
+      commit('SHOW_SNACKBAR', 'Task Updated')
+    },
+    async editDate({ commit }, data) {
+      await axios.patch(taskURL + data.id + "/", data.payload);
+      commit('EDIT_DATE', data);
+      commit('SHOW_SNACKBAR', 'Due Date Updated')
+    }
+  },
+  getters: {
+    tasksFiltered(state) {
+      if (!state.search) return state.tasks;
+      return state.tasks.filter(task => task.name.toLowerCase().includes(state.search.toLowerCase()))
     }
   },
   modules: {
