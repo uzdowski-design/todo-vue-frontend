@@ -1,7 +1,7 @@
 <template>
   <div container clas="home">
     <v-card class="mx-auto">
-      <v-card-title class="text-uppercase text-center justify-center"
+      <v-card-title class="text-uppercase text-center justify-center text-h5"
         >Manage your lists</v-card-title
       >
     </v-card>

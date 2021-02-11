@@ -9,6 +9,7 @@ const taskURL = "http://127.0.0.1:8000/tasks/";
 
 export default new Vuex.Store({
   state: {
+    appTitle: process.env.VUE_APP_TITLE,
     search: null,
     lists: [],
     tasks: [],

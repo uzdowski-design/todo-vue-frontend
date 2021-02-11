@@ -13,7 +13,7 @@ const routes = [
   },
   {
     path: '/lists/:id',
-    name: 'Todo',
+    name: 'Tasks',
     component: Todo
   },
   {
@@ -29,6 +29,11 @@ const routes = [
 const router = new VueRouter({
   routes,
   mode: 'history'
+})
+
+router.beforeEach((to, from, next) => {
+  document.title = `${process.env.VUE_APP_TITLE} - ${to.name}`
+  next()
 })
 
 export default router
