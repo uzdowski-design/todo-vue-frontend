@@ -8,7 +8,7 @@
         gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
       >
         <v-avatar size="80" class="mb-2">
-          <img src="@/assets/avatar.png" alt="Michal Uzdowski" />
+          <img src="@/assets/ud_min.png" alt="Michal Uzdowski" />
         </v-avatar>
         <div class="white--text text-subtitle-1 font-weight-bold">
           Michal Uzdowski

@@ -18,7 +18,7 @@
 
         <v-list-item-action v-if="task.due_date">
           <v-list-item-action-text>
-            <v-icon small>mdi-calendar</v-icon>
+            <v-icon :color="isOverdue" small>mdi-calendar</v-icon>
             {{ task.due_date | niceDate }}
           </v-list-item-action-text>
         </v-list-item-action>
@@ -40,6 +40,13 @@ export default {
   filters: {
     niceDate(value) {
       return format(new Date(value), "MMM d");
+    },
+  },
+  computed: {
+    isOverdue() {
+      let nowFormatted = format(new Date(), "yyyy-MM-dd");
+      let dueDate = this.task.due_date;
+      if (dueDate < nowFormatted) return "red";
     },
   },
   components: {
