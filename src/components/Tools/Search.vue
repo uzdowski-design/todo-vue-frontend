@@ -1,3 +1,5 @@
+// Component used to search through tasks on the list
+
 <template>
   <v-text-field
     :value="$store.state.search"

@@ -1,3 +1,4 @@
+// Menu on the task to edit name / edit due date / delete / sort
 <template>
   <div>
     <v-menu bottom left>
@@ -68,6 +69,13 @@ export default {
         icon: "mdi-delete",
         click() {
           this.dialogs.delete = true;
+        },
+      },
+      {
+        title: "Sort",
+        icon: "mdi-drag-horizontal-variant",
+        click() {
+          this.$store.commit("TOGGLE_SORTING");
         },
       },
     ],

@@ -1,3 +1,4 @@
+// Component for displaying Home tab on the list panel
 <template>
   <v-list-item :to="'/'" link>
     <v-list-item-icon class="my-auto">
@@ -7,11 +8,6 @@
     <v-list-item-content>
       <v-list-item-title>Home</v-list-item-title>
     </v-list-item-content>
-    <!-- <v-list-item-action>
-      <v-btn icon>
-        <v-icon>mdi-arrow-right-bold-circle</v-icon>
-      </v-btn>
-    </v-list-item-action> -->
   </v-list-item>
 </template>
 

@@ -1,3 +1,4 @@
+// Text field to add new task
 <template>
   <v-text-field
     v-model="newTaskTitle"

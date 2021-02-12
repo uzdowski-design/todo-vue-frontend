@@ -1,23 +1,33 @@
+// Component displaying list of all tasks
 <template>
   <v-list flat class="pt-0">
-    <task
-      v-for="task in tasks"
-      :key="task.id"
-      :task="task"
-      :doneTask="doneTask"
-      :deleteTask="deleteTask"
-    />
+    <draggable v-model="tasks" handle=".handle">
+      <task
+        v-for="task in tasks"
+        :key="task.id"
+        :task="task"
+        :doneTask="doneTask"
+        :deleteTask="deleteTask"
+      />
+    </draggable>
   </v-list>
 </template>
 
 <script>
+import draggable from "vuedraggable";
 export default {
   components: {
     task: require("@/components/Todo/Task.vue").default,
+    draggable,
   },
   computed: {
-    tasks() {
-      return this.$store.getters.tasksFiltered;
+    tasks: {
+      get() {
+        return this.$store.getters.tasksFiltered;
+      },
+      set(value) {
+        this.$store.dispatch("orderTasks", value);
+      },
     },
   },
   methods: {

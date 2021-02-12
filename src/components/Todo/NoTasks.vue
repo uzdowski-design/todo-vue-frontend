@@ -1,3 +1,4 @@
+// Component displayed when there are no tasks on the current list
 <template>
   <div class="no-tasks">
     <v-icon size="100" color="primary"> mdi-check </v-icon>

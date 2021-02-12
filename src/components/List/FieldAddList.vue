@@ -1,3 +1,4 @@
+// Field to create new list
 <template>
   <v-text-field
     v-model="newListTitle"

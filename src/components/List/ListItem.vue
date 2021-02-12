@@ -1,3 +1,4 @@
+// Component to display all task lists
 <template>
   <div>
     <v-list-item :to="'/lists/' + list.id" link>

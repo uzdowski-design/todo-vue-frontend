@@ -1,3 +1,5 @@
+// Component used to display current date in the app header
+
 <template>
   <div class="text-subtitle-1 ml-4">{{ date }}</div>
 </template>
@@ -21,6 +23,3 @@ export default {
   },
 };
 </script>
-
-<style>
-</style>

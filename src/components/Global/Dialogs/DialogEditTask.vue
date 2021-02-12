@@ -1,3 +1,4 @@
+// Dialog for editing task name
 <template>
   <v-dialog :value="true" persistent max-width="290">
     <v-card>

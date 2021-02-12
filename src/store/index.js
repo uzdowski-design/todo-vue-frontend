@@ -4,8 +4,9 @@ import axios from "axios";
 
 Vue.use(Vuex)
 
-const listURL = "http://127.0.0.1:8000/lists/";
-const taskURL = "http://127.0.0.1:8000/tasks/";
+// take urls from env variables
+const listURL = process.env.VUE_APP_LIST_URL;
+const taskURL = process.env.VUE_APP_TASK_URL;
 
 export default new Vuex.Store({
   state: {
@@ -16,12 +17,11 @@ export default new Vuex.Store({
     snackbar: {
       show: false,
       text: ''
-    }
+    },
+    sorting: false
   },
   mutations: {
-    SET_SEARCH(state, value) {
-      state.search = value;
-    },
+    // lists mutations
     SET_LISTS(state, lists) {
       state.lists = lists
     },
@@ -31,6 +31,7 @@ export default new Vuex.Store({
     DELETE_LIST(state, data) {
       state.lists = state.lists.filter(list => list.id !== data.id)
     },
+    // tasks mutations
     SET_TASKS(state, tasks) {
       state.tasks = tasks
     },
@@ -58,6 +59,10 @@ export default new Vuex.Store({
       newState[elIndex] = { ...newState[elIndex], due_date: data.payload.due_date }
       state.tasks = newState;
     },
+    ORDER_TASKS(state, tasks) {
+      state.tasks = tasks;
+    },
+    // tools mutations
     SHOW_SNACKBAR(state, text) {
       let timeout = 0; // make one disappear before next is shown
       if (state.snackbar.show) {
@@ -72,6 +77,12 @@ export default new Vuex.Store({
     CLOSE_SNACKBAR(state) {
       state.snackbar.show = false;
       state.snackbar.text = ''
+    },
+    SET_SEARCH(state, value) {
+      state.search = value;
+    },
+    TOGGLE_SORTING(state) {
+      state.sorting = !state.sorting;
     }
   },
   actions: {
@@ -118,12 +129,22 @@ export default new Vuex.Store({
       await axios.patch(taskURL + data.id + "/", data.payload);
       commit('EDIT_DATE', data);
       commit('SHOW_SNACKBAR', 'Due Date Updated')
+    },
+    async orderTasks({ commit, getters }, tasks) {
+      let newList = getters.allLists.filter(list => list.id == tasks[0].parent_id)
+      let newListSorted = [...newList]
+      newListSorted[0].children = tasks
+      await axios.patch(listURL + tasks[0].parent_id + '/', newListSorted[0]);
+      commit('ORDER_TASKS', tasks)
     }
   },
   getters: {
     tasksFiltered(state) {
       if (!state.search) return state.tasks;
       return state.tasks.filter(task => task.name.toLowerCase().includes(state.search.toLowerCase()))
+    },
+    allLists(state) {
+      return state.lists
     }
   },
   modules: {

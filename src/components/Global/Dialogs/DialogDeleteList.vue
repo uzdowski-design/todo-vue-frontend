@@ -1,3 +1,5 @@
+// Component for list deleting dialog
+
 <template>
   <v-dialog :value="true" persistent max-width="290">
     <v-card>

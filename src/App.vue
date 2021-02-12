@@ -57,7 +57,7 @@
           <v-toolbar-title class="text-h4 ml-4">
             {{
               this.$route.path == "/"
-                ? "Your dashboard"
+                ? getAppTitle()
                 : $store.state.lists.find((x) => x.id == this.$route.params.id)
                 ? $store.state.lists.find((x) => x.id == this.$route.params.id)
                     .name + " tasks"
@@ -104,6 +104,9 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    getAppTitle() {
+      return process.env.VUE_APP_TITLE;
     },
   },
   computed: {

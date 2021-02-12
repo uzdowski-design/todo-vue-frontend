@@ -1,3 +1,4 @@
+// Snackbar displayed when components are modified (task or list created, updated, deleted)
 <template>
   <v-snackbar v-model="$store.state.snackbar.show" :timeout="timeout">
     {{ $store.state.snackbar.text }}
