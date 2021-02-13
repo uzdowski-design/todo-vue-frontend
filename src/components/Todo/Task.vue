@@ -47,7 +47,7 @@
 import { format } from "date-fns";
 
 export default {
-  props: ["task", "doneTask", "deleteTask"],
+  props: ["task"],
   filters: {
     niceDate(value) {
       return format(new Date(value), "MMM d");
@@ -58,6 +58,17 @@ export default {
       let nowFormatted = format(new Date(), "yyyy-MM-dd");
       let dueDate = this.task.due_date;
       if (dueDate < nowFormatted) return "red";
+    },
+  },
+  methods: {
+    doneTask(id) {
+      const data = {
+        id: id,
+        payload: {
+          done: !this.task.done,
+        },
+      };
+      this.$store.dispatch("doneTask", data);
     },
   },
   components: {

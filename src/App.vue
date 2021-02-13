@@ -3,12 +3,12 @@
     <v-navigation-drawer v-model="drawer" :mobile-breakpoint="768" app>
       <v-img
         class="pa-4 pt-5"
-        src="@/assets/mountains.jpeg"
+        src="mountains.jpeg"
         height="170"
         gradient="to top right, rgba(19,84,122,.5), rgba(128,208,199,.8)"
       >
         <v-avatar size="80" class="mb-2">
-          <img src="@/assets/ud_min.png" alt="Michal Uzdowski" />
+          <img src="ud_min.png" alt="Michal Uzdowski" />
         </v-avatar>
         <div class="white--text text-subtitle-1 font-weight-bold">
           Michal Uzdowski
@@ -22,10 +22,10 @@
         <list-dashboard />
 
         <list-item
+          :showEdit="false"
           v-for="list in lists"
           :key="list.id"
           :list="list"
-          :deleteList="deleteList"
         />
         <list-about />
       </v-list>
@@ -35,7 +35,7 @@
       app
       color="primary"
       dark
-      src="@/assets/mountains.jpeg"
+      src="mountains.jpeg"
       prominent
       height="170"
     >
@@ -60,7 +60,7 @@
                 ? getAppTitle()
                 : $store.state.lists.find((x) => x.id == this.$route.params.id)
                 ? $store.state.lists.find((x) => x.id == this.$route.params.id)
-                    .name + " tasks"
+                    .name
                 : "Pick a list to view tasks"
             }}
           </v-toolbar-title>
@@ -95,16 +95,6 @@ export default {
     snackbar: require("@/components/Global/Snackbar.vue").default,
   },
   methods: {
-    deleteList(id) {
-      try {
-        this.$store.dispatch("deleteList", { id: id });
-        if (id == this.$route.params.id) {
-          this.$router.push("/");
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    },
     getAppTitle() {
       return process.env.VUE_APP_TITLE;
     },

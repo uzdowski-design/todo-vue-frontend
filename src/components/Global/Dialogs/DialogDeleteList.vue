@@ -21,6 +21,18 @@
 
 <script>
 export default {
-  props: ["list", "deleteList"],
+  props: ["list"],
+  methods: {
+    deleteList(id) {
+      try {
+        this.$store.dispatch("deleteList", { id: id });
+        if (id == this.$route.params.id) {
+          this.$router.push("/");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    },
+  },
 };
 </script>

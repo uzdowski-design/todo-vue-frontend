@@ -31,6 +31,12 @@ export default new Vuex.Store({
     DELETE_LIST(state, data) {
       state.lists = state.lists.filter(list => list.id !== data.id)
     },
+    EDIT_LIST(state, data) {
+      let newState = [...state.lists]
+      const elIndex = state.lists.findIndex(el => el.id == data.id)
+      newState[elIndex] = { ...newState[elIndex], name: data.payload.name }
+      state.lists = newState;
+    },
     // tasks mutations
     SET_TASKS(state, tasks) {
       state.tasks = tasks
@@ -96,6 +102,11 @@ export default new Vuex.Store({
       commit('ADD_LIST', res.data);
       commit('SHOW_SNACKBAR', 'List Created');
     },
+    async editList({ commit }, data) {
+      await axios.patch(listURL + data.id + "/", data.payload);
+      commit('EDIT_LIST', data);
+      commit('SHOW_SNACKBAR', 'Task Updated')
+    },
     async deleteList({ commit }, data) {
       await axios.delete(listURL + data.id + '/');
       commit('DELETE_LIST', data)
@@ -145,7 +156,8 @@ export default new Vuex.Store({
     },
     allLists(state) {
       return state.lists
-    }
+    },
+
   },
   modules: {
   }
