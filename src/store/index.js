@@ -154,6 +154,10 @@ export default new Vuex.Store({
       if (!state.search) return state.tasks;
       return state.tasks.filter(task => task.name.toLowerCase().includes(state.search.toLowerCase()))
     },
+    listsFiltered(state) {
+      if (!state.search) return state.lists;
+      return state.lists.filter(list => list.name.toLowerCase().includes(state.search.toLowerCase()))
+    },
     allLists(state) {
       return state.lists
     },
