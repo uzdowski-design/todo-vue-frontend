@@ -55,6 +55,7 @@ export default {
   },
   computed: {
     isOverdue() {
+      if (this.task.done) return;
       let nowFormatted = format(new Date(), "yyyy-MM-dd");
       let dueDate = this.task.due_date;
       if (dueDate < nowFormatted) return "red";
