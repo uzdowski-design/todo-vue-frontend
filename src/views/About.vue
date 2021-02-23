@@ -2,18 +2,18 @@
   <div class="about pa-6">
     <h1 class="mb-2">About {{ $store.state.appTitle }}</h1>
     <p>
-      <b>Task manager</b> is the best app ever to help you manage your daily tasks.
+      <b>Task Manager</b> is the best app ever to help you manage your daily tasks.
       <br/>From a simple grocery list to a more complex project - we've got you covered! 👍
     </p>
     <p>
-      Need to make some notes? Just create a new <b>Tasks List</b> and add some <b>Tasks</b>.
+      Need to make some notes? Just create a new <b>Task List</b> and add some <b>Tasks</b>.
       It can't be simplier than that!
     </p>
     <p>Task Manager provides all the funcionality you might seek.
       <ul>
         <li>Add task</li>
         <li>Edit task</li>
-        <li>Set tas due date</li>
+        <li>Set task due date</li>
         <li>Delete task</li>
       </ul>
       What else could you possibly need? 🤔
