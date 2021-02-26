@@ -56,12 +56,10 @@
         <v-row>
           <v-toolbar-title class="text-h4 ml-4">
             {{
-              this.$route.path == "/"
-                ? getAppTitle()
-                : $store.state.lists.find((x) => x.id == this.$route.params.id)
+              $store.state.lists.find((x) => x.id == this.$route.params.id)
                 ? $store.state.lists.find((x) => x.id == this.$route.params.id)
                     .name
-                : "Pick a list to view tasks"
+                : getAppTitle()
             }}
           </v-toolbar-title>
         </v-row>
