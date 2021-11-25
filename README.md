@@ -1,5 +1,7 @@
 # TASK MANAGER
 
+![Task Manager](/public/task-manager-image.png)
+
 ## Project Overview
 This project provides a Front-End for the **Task Manager** application.
 Created using *Vue.js* and *Vuetify.js*.  
